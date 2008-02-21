@@ -159,6 +159,6 @@ typedef enum {
 } CVMJITRegsRequiredTypeValues;
 typedef CVMUint8 CVMJITRegsRequiredType;
 #endif
-
+;
 #endif /* !_ASM */
 #endif /* _INCLUDED_JIT_RISC_H */

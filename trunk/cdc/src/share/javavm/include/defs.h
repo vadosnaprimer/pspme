@@ -262,7 +262,7 @@ typedef CVMBool (*CVMObjectCallbackFunc)(CVMObject* obj, CVMClassBlock* cb,
  * Scan all GC references in a frame. Each frame carries a pointer
  * to one of these.
  */
-typedef void CVMFrameGCScannerFunc(CVMExecEnv* ee,
+typedef void (*CVMFrameGCScannerFunc)(CVMExecEnv* ee,
 				   CVMFrame* thisFrame,
 				   CVMStackChunk* thisChunk,
 				   CVMRefCallbackFunc refCallback,

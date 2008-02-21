@@ -24,9 +24,7 @@
  * information or have any questions. 
  *
  */
-
-#include <limits.h>
-#include <linux/limits.h>
+#include <sys/syslimits.h>
 
 #define CVM_PATH_MAXLEN                 PATH_MAX
 #define CVM_PATH_CLASSFILEEXT           "class"
@@ -37,4 +35,8 @@
 /* Defined in canonicalize_md.c */
 extern int
 canonicalize(const char *original, char *resolved, int len);
+
+extern char *
+realpath(const char *, char *);
+
 #define CVMcanonicalize canonicalize

@@ -1,5 +1,5 @@
 /*
- * @(#)sync_md.h	1.22 06/10/10
+ * @(#)FileSystem_md.c	1.7 06/10/10
  *
  * Copyright  1990-2006 Sun Microsystems, Inc. All Rights Reserved.  
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER  
@@ -25,57 +25,13 @@
  *
  */
 
-/*
- * Machine-dependent synchronization definitions.
- */
+#include "jni.h"
+#include "jni_util.h"
+#include "java_io_FileSystem.h"
 
-#ifndef _PSP_SYNC_MD_H
-#define _PSP_SYNC_MD_H
 
-#include "javavm/include/porting/vm-defs.h"
-#include "javavm/include/sync_arch.h"
-
-#ifndef CVM_FASTLOCK_TYPE
-/* Use microlocks for fastlocks by default */
-#define CVM_FASTLOCK_TYPE CVM_FASTLOCK_MICROLOCK
-#endif
-
-#ifndef CVM_MICROLOCK_TYPE
-#define CVM_MICROLOCK_TYPE CVM_MICROLOCK_DEFAULT
-#endif
-
-#ifndef _ASM
-
-/*
- * CVM_ADV_SPINLOCK support, if needed. Note that CVMvolatileStore
- * must be implemented in sync_arch.h because it is CPU dependent.
- */
-#ifdef CVM_ADV_SPINLOCK
-
-#include <time.h>   /* for nanosleep() */
-
-/* Yield to another thread when microlock is contended */
-#define CVMspinlockYield() \
-    CVMspinlockYieldImpl()
-
-static inline void CVMspinlockYieldImpl()
+JNIEXPORT jobject JNICALL  
+Java_java_io_FileSystem_getFileSystem(JNIEnv *env, jclass ignored)
 {
-    struct timespec tm;
-    tm.tv_sec = 0;
-    tm.tv_nsec = 5000000; /* 5 milliseconds. */
-    nanosleep(&tm, NULL);
+    return JNU_NewObjectByName(env, "java/io/UnixFileSystem", "()V");
 }
-
-#endif /* CVM_ADV_SPINLOCK */
-
-
-struct CVMMutex {
-   int dummy;
-};
-
-struct CVMCondVar {
-   int dummy;
-};
-
-#endif /* !_ASM */
-#endif /* _PSP_SYNC_MD_H */

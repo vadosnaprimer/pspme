@@ -43,7 +43,12 @@
 #include "javavm/include/mem_mgr.h"
 #endif
 
-CVMFrameGCScannerFunc CVMcompiledFrameScanner;
+void CVMcompiledFrameScanner(CVMExecEnv* ee,
+				   CVMFrame* thisFrame,
+				   CVMStackChunk* thisChunk,
+				   CVMRefCallbackFunc refCallback,
+				   void* data,
+				   CVMGCOptions* gcOpts);
 
 typedef struct {
     CVMFrame *frame;

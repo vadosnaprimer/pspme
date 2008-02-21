@@ -29,15 +29,23 @@
 #
 # platform specific architecture flags
 #
+
+PSPSDK_DIR=`psp-config -p`
+
 ASM_ARCH_FLAGS		= 
-CC_ARCH_FLAGS   	= 
+CC_ARCH_FLAGS   	= -I/usr/local/pspdev/psp/sdk/include -G0
 # Fix gcc fp extra precision bug on mips 
 CC_ARCH_FLAGS_FDLIB	= -ffloat-store
 CC_ARCH_FLAGS_LOOP 	=
-LINK_ARCH_FLAGS 	=
-LINK_ARCH_LIBS		= -lm
 
-PSPSDK_DIR=`psp-config -p`
+
+#LINK_ARCH_FLAGS 	= -L/usr/local/pspdev/psp/lib -L/usr/local/pspdev/psp/sdk/lib
+
+#LIBS := -lSDL -lSDL_mixer -lpsphprm -lvorbis -lvorbisfile -logg -lpspaudiolib -lpspaudio -lpspgu -l psprtc -lm
+#LIBS := -Wl,--start-group -lmidp$(g) -lcldc_vm$(g) --end-group  -lpcsl_file -lpcsl_print -lpcsl_memory -lpcsl_string -lpcsl_network -ljavacall$(g) $(LIBS) 
+#LINK_ARCH_LIBS		= $(LIBS)
+
+
 CVM_INCLUDE_DIRS += PSPSDK_DIR/include
 
 # assume the JIT is enabled for this device unless told otherwise

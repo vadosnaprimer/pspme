@@ -44,10 +44,6 @@
  * CVMmemDecommit()  mmap(... MAP_NORESERVE ...)
  */
 
-#include <unistd.h>
-#include <sys/mman.h>
-#include <fcntl.h>
-
 #include "javavm/include/porting/memory.h"
 #include "javavm/include/utils.h"
 

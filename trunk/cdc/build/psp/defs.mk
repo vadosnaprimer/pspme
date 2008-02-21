@@ -24,6 +24,10 @@
 # @(#)defs.mk	1.79 06/10/13
 #
 
+#M@x: can we set it false while classloading is true???
+CVM_DYNAMIC_LINKING = false
+
+
 #
 # defs for Linux target
 #
@@ -63,14 +67,9 @@ CVM_TARGETOBJS_SPACE += \
 	java_md.o \
 	ansi_java_md.o \
 	canonicalize_md.o \
-	posix_sync_md.o \
-	posix_threads_md.o \
 	io_md.o \
 	posix_io_md.o \
-	posix_net_md.o \
-	net_md.o \
 	time_md.o \
-	io_util.o \
 	sync_md.o \
 	system_md.o \
 	threads_md.o \

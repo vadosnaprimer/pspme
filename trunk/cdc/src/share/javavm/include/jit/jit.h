@@ -37,6 +37,7 @@
  *
  * CVMJITReturnValue indicates how the compiler fared.
  */
+
 typedef enum CVMJITReturnValue {
     CVMJIT_SUCCESS		= 1,
     CVMJIT_CANNOT_COMPILE,	     /* Refusal to compile, don't try again */

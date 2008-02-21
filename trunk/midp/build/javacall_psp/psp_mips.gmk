@@ -47,7 +47,7 @@ TARGET_VM		= cldc_vm
 
 # Platform-specific compiler flags
 EXTRA_CPPFLAGS += -G0
-EXTRA_CFLAGS += -G0
+EXTRA_CFLAGS += -G0 -I$(JAVACALL_INCLUDE_DIR) 
 PATHSEP = \;
 
 # Platform-specific linker flags and libraries

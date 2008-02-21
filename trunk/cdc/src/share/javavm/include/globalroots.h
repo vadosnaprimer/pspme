@@ -68,7 +68,12 @@ CVMID_freeWeakGlobalRoot(CVMExecEnv* ee, CVMObjectICell* glRoot);
 /*
  * Scan global roots for GC, calling 'callback' on each
  */
-extern CVMFrameGCScannerFunc CVMglobalrootFrameScanner;
+extern void CVMglobalrootFrameScanner(CVMExecEnv* ee,
+				   CVMFrame* thisFrame,
+				   CVMStackChunk* thisChunk,
+				   CVMRefCallbackFunc refCallback,
+				   void* data,
+				   CVMGCOptions* gcOpts);
 
 #endif /* _INCLUDED_GLOBALROOTS_H */
 

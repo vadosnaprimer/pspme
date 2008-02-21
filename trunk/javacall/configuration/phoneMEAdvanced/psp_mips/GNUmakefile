@@ -30,7 +30,10 @@ endif
 CC=psp-gcc
 AR=psp-ar
 
+
+CFLAGS += -I/usr/local/pspdev/psp/sdk/include -G0
 include environment.gmk
+
 
 #For each project specified toolchain shall be selected
 include $(JAVACALL_DIR)/build/gcc/rules.gmk

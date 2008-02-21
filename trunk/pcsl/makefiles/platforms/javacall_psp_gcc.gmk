@@ -10,7 +10,7 @@
 #
 ######################################################################
 
-PCSL_OS=javacall
+PCSL_OS=psp
 PCSL_CPU=mips
 
 FILE_MODULE=javacall
