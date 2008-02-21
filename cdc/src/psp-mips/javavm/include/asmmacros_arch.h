@@ -31,14 +31,15 @@
 #ifndef _ASM
 #define _ASM 
 #endif
-	
-#include <asm/regdef.h>
-#include <asm/asm.h>
+
+#include <machine/regdef.h>
+#include <machine/asm.h>
 
 #define ENTRY(x)	LEAF(x)
 #define SET_SIZE(x)	END(x)
 
-#ifdef __PIC__
+//#ifdef __PIC__
+#if 0
 #define LA(r,sym)			\
 	lui	r, %hi(sym);		\
 	addiu	r, %lo(sym)

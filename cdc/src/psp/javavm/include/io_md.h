@@ -30,7 +30,7 @@
  */
 
 #ifndef _LINUX_IO_MD_H
-#define _LINUX_IO_MD_H
+#define _PSP_IO_MD_H
 
 #include "javavm/include/porting/vm-defs.h"
 
@@ -43,29 +43,11 @@
 #include <netdb.h>
 #include <fcntl.h>
 
-#if defined(_LFS_LARGEFILE) || defined(HAVE_64_BIT_IO)
-#define POSIX_HAVE_64_BIT_IO
-#define CVMioOpen		CVMioOpen
-#define CVMioSeek		CVMioSeek
-#define CVMioSetLength		CVMioSetLength
-#define CVMioAvailable		CVMioAvailable
-#define CVMioFileSizeFD		CVMioFileSizeFD
-#endif
 
-#define POSIX_HAVE_FSYNC
-#define POSIX_HAVE_FTRUNCATE
-
-/* Define the functions we will override */
-#define CVMioRead		CVMioRead
-#define CVMioClose		CVMioClose
+//#define POSIX_HAVE_FSYNC
+//#define POSIX_HAVE_FTRUNCATE
+#define POSIX_HAVE_CUSTOM_IO_AVAILABLE
 
 #include "portlibs/posix/io.h"
-#include <sys/poll.h>
 
-CVMBool linuxIoInit(void);
-void LINUXioEnqueue(CVMThreadID *t);
-void LINUXioDequeue(CVMThreadID *t);
-CVMInt32 LINUXioDup2(int fd1, int fd2);
-CVMInt32 LINUXioPoll(struct pollfd *ufds, unsigned int nfds, int timeout);
-
-#endif /* _LINUX_IO_MD_H */
+#endif /* _PSP_IO_MD_H */

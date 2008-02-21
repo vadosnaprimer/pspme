@@ -43,7 +43,7 @@
    define it first.  For generic linux, we define it to 1 by default to
    enable the use of MMAP APIs. */
 #ifndef CVM_USE_MMAP_APIS
-#define CVM_USE_MMAP_APIS  1 /* 1 to enable, 0 to disable */
+#define CVM_USE_MMAP_APIS  0 /* 1 to enable, 0 to disable */
 #endif
 
 #endif /* LINUX_MEMORY_MD_H */

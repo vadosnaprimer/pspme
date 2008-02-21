@@ -94,7 +94,12 @@ CVMIDprivate_allocateLocalRootUnsafe(CVMExecEnv* ee,
 /*
  * Scan local roots for GC, calling 'callback' on each
  */
-extern CVMFrameGCScannerFunc CVMlocalrootFrameScanner;
+extern void CVMlocalrootFrameScanner(CVMExecEnv* ee,
+				   CVMFrame* thisFrame,
+				   CVMStackChunk* thisChunk,
+				   CVMRefCallbackFunc refCallback,
+				   void* data,
+				   CVMGCOptions* gcOpts);
 
 #endif /* _INCLUDED_LOCALROOTS_H */
 

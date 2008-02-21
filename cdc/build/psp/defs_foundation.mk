@@ -32,7 +32,4 @@ CLASSLIB_CLASSES += \
 #
 # Platform specific objects
 #
-CVM_TARGETOBJS_SPACE += \
-	SocketInputStream_md.o \
-	SocketOutputStream_md.o \
-	PlainSocketImpl_md.o \
+CVM_TARGETOBJS_SPACE += 

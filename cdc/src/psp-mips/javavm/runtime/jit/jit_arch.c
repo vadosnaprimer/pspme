@@ -26,11 +26,11 @@
  */
 
 #include "javavm/include/porting/jit/jit.h"
-#include <sys/cachectl.h>
 
 /* Purpose: Flush I & D caches after writing compiled code. */
 void
 CVMJITflushCache(void* begin, void* end)
 {
-    cacheflush(begin, end - begin, BCACHE);
+    printf("STUB: CVMJITflushCache not implemented!!!!!!!!!!!!!!\n");
+    //cacheflush(begin, end - begin, BCACHE);
 }

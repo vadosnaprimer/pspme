@@ -25,8 +25,8 @@
  *
  */
 
-#ifndef _LINUX_MIPS_JIT_ARCH_H
-#define _LINUX_MIPS_JIT_ARCH_H
+#ifndef _PSP_MIPS_JIT_ARCH_H
+#define _PSP_MIPS_JIT_ARCH_H
 
 /*
  * Do these first, since other headers rely on their settings
@@ -49,8 +49,8 @@
  * information. In this case, we want to be accurate to within an instrruction.
  */
 #define CVMJIT_PROFILE_REGION_SIZE CVMCPU_INSTRUCTION_SIZE
-#ifndef _ASM
-#include "portlibs/posix/posix_jit_profil.h"
-#endif
+//#ifndef _ASM
+//#include "portlibs/posix/posix_jit_profil.h"
+//#endif
 
-#endif /* _LINUX_MIPS_JIT_ARCH_H */
+#endif /* _PSP_MIPS_JIT_ARCH_H */

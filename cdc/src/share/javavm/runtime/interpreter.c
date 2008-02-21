@@ -1031,7 +1031,7 @@ CVMfreelistFrameScanner(CVMExecEnv* ee,
 			     chunk, callback, data, CVM_TRUE);
 }
 
-CVMFrameGCScannerFunc * const CVMframeScanners[CVM_NUM_FRAMETYPES] =
+CVMFrameGCScannerFunc const CVMframeScanners[CVM_NUM_FRAMETYPES] =
 {
 #ifdef CVM_DEBUG_ASSERTS
     NULL,			/* CVM_FRAMETYPE_NONE */

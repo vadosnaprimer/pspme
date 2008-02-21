@@ -76,7 +76,10 @@ ifeq ($(USE_MIDP),true)
 SOURCE_OUTPUT_LIST += $(MIDP_JC_IMPL_PATH)/$(MIDP_JC_DIR) javacall/implementation/psp_mips
 endif
 
-UTILITIES += javautil_unicode
+UTILITIES =                 \
+        javautil_jad_parser \
+        javautil_string \
+	javautil_unicode
 
 #Compile options that are not common for all configurations can be specified in
 #SPECIFIC_DEFINITIONS variable

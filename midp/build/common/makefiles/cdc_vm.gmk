@@ -104,6 +104,7 @@ endef
 #
 CDC_TARGET_CPU_i386 = x86
 CDC_TARGET_CPU_arm  = arm
+CDC_TARGET_CPU_mips = mips
 CDC_TARGET_CPU      = ${CDC_TARGET_CPU_${TARGET_CPU}}
 
 VM_INCLUDES += -I$(CDC_DIST_DIR)/include -I$(CDC_DIR)/src \
@@ -111,6 +112,8 @@ VM_INCLUDES += -I$(CDC_DIST_DIR)/include -I$(CDC_DIR)/src \
                -I$(CDC_DIR)/src/$(HOST_OS) -I$(CDC_DIST_DIR) \
                -I$(CDC_DIR)/src/$(HOST_OS)-$(CDC_TARGET_CPU) \
                -I$(CDC_DIR)/src/$(CDC_TARGET_CPU) \
+               -I$(CDC_DIR)/src/$(TARGET_DEVICE) \
+               -I$(CDC_DIR)/src/$(TARGET_DEVICE)-$(CDC_TARGET_CPU) \
 	             -I$(MIDP_OUTPUT_DIR) \
                -I$(MIDP_DIR)/src/core/vm_services/cdc_vm/native
 

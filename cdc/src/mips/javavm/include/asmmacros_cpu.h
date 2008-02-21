@@ -33,5 +33,8 @@
 #endif
 
 #include "javavm/include/asmmacros_arch.h"
+
+#define jp t9
+#define fp s8
 	
 #endif /* _INCLUDED_ASMMACROS_CPU_H */

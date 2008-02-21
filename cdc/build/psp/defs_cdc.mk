@@ -42,13 +42,4 @@ CLASSLIB_CLASSES += \
 #
 CVM_TARGETOBJS_SPACE += \
 	Runtime_md.o \
-	UnixFileSystem_md.o \
-	UNIXProcess_md.o \
 	FileSystem_md.o \
-	Inet4AddressImpl_md.o \
-	Inet6AddressImpl_md.o \
-	InetAddressImplFactory.o \
-	NetworkInterface.o \
-	timezone_md.o \
-	PlainDatagramSocketImpl_md.o \
-	net_util_md.o

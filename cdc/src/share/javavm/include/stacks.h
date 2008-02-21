@@ -115,7 +115,7 @@ typedef enum {
     CVM_FRAMEFLAG_EXCEPTION = 0x2
 } CVMFrameFlags;
 
-extern CVMFrameGCScannerFunc * const CVMframeScanners[CVM_NUM_FRAMETYPES];
+extern CVMFrameGCScannerFunc const CVMframeScanners[CVM_NUM_FRAMETYPES];
 
 /****************************************************************************
  * CVMFrame
