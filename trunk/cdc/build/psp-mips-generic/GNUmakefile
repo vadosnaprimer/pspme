@@ -33,7 +33,7 @@
 PSPSDK_DIR=`psp-config -p`
 
 ASM_ARCH_FLAGS		= 
-CC_ARCH_FLAGS   	= -I/usr/local/pspdev/psp/sdk/include -G0
+CC_ARCH_FLAGS   	= -I/usr/local/pspdev/psp/sdk/include -G0 -D__rtems__
 # Fix gcc fp extra precision bug on mips 
 CC_ARCH_FLAGS_FDLIB	= -ffloat-store
 CC_ARCH_FLAGS_LOOP 	=

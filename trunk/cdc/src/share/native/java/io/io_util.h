@@ -28,7 +28,7 @@
 #include "jni.h"
 #include "jni_util.h"
 
-#include "jdkio2cvm.h"
+//#include "jdkio2cvm.h"
 
 #include "jni_statics.h"
 

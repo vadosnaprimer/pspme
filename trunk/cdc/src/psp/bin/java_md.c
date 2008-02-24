@@ -39,7 +39,7 @@ struct itimerval prof_timer;
 #endif
 
 int
-main(int argc, const char **argv)
+cvmmain(int argc, const char **argv)
 {
 #if defined(CVM_GPROF)
     getitimer(ITIMER_PROF, &prof_timer);

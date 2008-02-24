@@ -30,4 +30,12 @@
 #include "javavm/include/porting/ansi/stdlib.h"
 #include "portlibs/posix/threads.h"
 
-//STUB
+
+CVMInt64
+CVMtimeMillis(void)
+{
+    struct timeval t;
+    gettimeofday(&t, 0);
+    return (CVMInt64)(((CVMInt64)t.tv_sec) * 1000 + (CVMInt64)(t.tv_usec/1000));
+}
+

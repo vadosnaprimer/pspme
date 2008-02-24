@@ -35,7 +35,7 @@
 #include "portlibs/gcc_32_bit/jni.h"
 
 #define JNI_LIB_PREFIX "lib"
-#define JNI_LIB_SUFFIX ".so"
+#define JNI_LIB_SUFFIX ".prx"
 
 #ifdef _JAVA_TYPES_H_
 #define JNI_TYPES_ALREADY_DEFINED_IN_JNI_MD_H
