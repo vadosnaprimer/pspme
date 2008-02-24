@@ -33,4 +33,5 @@ CVMJITflushCache(void* begin, void* end)
 {
     printf("STUB: CVMJITflushCache not implemented!!!!!!!!!!!!!!\n");
     //cacheflush(begin, end - begin, BCACHE);
+    //sceKernelIcacheClearAll();
 }

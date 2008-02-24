@@ -32,14 +32,63 @@
 #ifndef _PSP_THREADS_MD_H
 #define _PSP_THREADS_MD_H
 
+
+#include "portlibs/posix/threads.h"
 #include "javavm/include/porting/sync.h"
 #include "javavm/include/threads_arch.h"
 
+#include <pthread.h>
+//#include <semaphore.h>
+#include <setjmp.h>
 
 struct CVMThreadID {
-   int dummy;
+    pthread_t pthreadCookie;
+    void *stackTop;
+#ifdef LINUX_WATCH_STACK_GROWTH
+    void *stackLimit;
+    void *stackBottom;
+#endif
+    /* support for CVMmutexSetOwner */
+    POSIXMutex locked;
+#ifdef CVM_THREAD_SUSPENSION
+    /* support for CVMthreadSuspend */
+    volatile CVMBool isSuspended;
+    volatile CVMBool isInSuspendHandler;
+    volatile CVMBool isMutexBlocked;
+#endif
+    /* support for Thread.interrupt */
+    volatile CVMBool isWaitBlocked;
+    CVMBool interrupted;
+    CVMBool notified;
+    /* emulate a semaphore */
+    pthread_mutex_t wait_mutex;
+    pthread_cond_t wait_cv;
+    int value;
+    /* support for close */
+    int fd;	/* only valid while thread is on I/O queue! */
+
+    CVMThreadArchData  archData;
+
+    /* IO or wait queue */
+    CVMThreadID *next;
+    CVMThreadID **prev_p;
 };
 
+#define POSIX_COOKIE(t)		((t)->pthreadCookie)
+
+#define CVMthreadCreate		POSIXthreadCreate
+#define CVMthreadSelf		POSIXthreadGetSelf
+
+#define CVMthreadGetPriority	POSIXthreadGetPriority
+#define CVMthreadSetPriority	POSIXthreadSetPriority
+
+
+/* NOTE: The current redzone and stack sizes below are taken straight from the
+         the debug version of Solaris port.  These numbers will probably fine 
+	 for the Linux port but may not be optimum.  To obtain the optimum
+	 numbers, one will have to run a static stack analysis written for
+	 analyzing the assembly code of CVM on the linux platform. 
+*/
 #define CVM_THREAD_MIN_C_STACK_SIZE				(32 * 1024)
 
 /* 
@@ -72,4 +121,7 @@ struct CVMThreadID {
 #define CVM_REDZONE_CVMcpFindFieldInSuperInterfaces             \
     (1024 + CVM_REDZONE_Lib_Overhead)
 
+extern void linuxCaptureInitialStack();
+
 #endif /* _PSP_THREADS_MD_H */
+

@@ -24,10 +24,6 @@
 # @(#)defs.mk	1.79 06/10/13
 #
 
-#M@x: can we set it false while classloading is true???
-CVM_DYNAMIC_LINKING = false
-
-
 #
 # defs for Linux target
 #
@@ -44,7 +40,6 @@ CVM_DEFINES	+= -D_GNU_SOURCE
 #
 CVM_SRCDIRS   += $(CVM_TOP)/src/portlibs/ansi_c
 CVM_SRCDIRS   += $(CVM_TOP)/src/portlibs/posix
-CVM_SRCDIRS   += $(CVM_TOP)/src/portlibs/dlfcn
 CVM_SRCDIRS   += $(CVM_TOP)/src/portlibs/realpath
 CVM_SRCDIRS   += \
 	$(CVM_TARGETROOT)/javavm/runtime \
@@ -68,6 +63,7 @@ CVM_TARGETOBJS_SPACE += \
 	ansi_java_md.o \
 	canonicalize_md.o \
 	io_md.o \
+	io_util.o \
 	posix_io_md.o \
 	time_md.o \
 	sync_md.o \

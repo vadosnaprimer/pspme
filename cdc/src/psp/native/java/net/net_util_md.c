@@ -1,5 +1,5 @@
 /*
- * @(#)net_md.h	1.12 06/10/10
+ * @(#)net_util_md.c	1.14 06/10/13
  *
  * Copyright  1990-2006 Sun Microsystems, Inc. All Rights Reserved.  
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER  
@@ -24,34 +24,9 @@
  * information or have any questions. 
  *
  */
+ 
 
-/*
- * Machine-dependent networking definitions.
- */
-
-#ifndef _PSP_NET_MD_H
-#define _PSP_NET_MD_H
-
-/* Define the functions we will override */
-#define CVMnetConnect		CVMnetConnect
-#define CVMnetAccept		CVMnetAccept
-#define CVMnetSendTo		CVMnetSendTo
-#define CVMnetSend		CVMnetSend
-#define CVMnetRecvFrom		CVMnetRecvFrom
-#define CVMnetRecv		CVMnetRecv
-#define CVMnetTimeout		CVMnetTimeout
-#define CVMnetSocketClose	CVMioClose
-
-#define POSIX_USE_SELECT
-
-/*
- * Permits Linux platform use of portlibs/posix/posix_net_md.c
- * implementation of CVMnetGetProtoByName.
-*/
-#define POSIX_HAVE_GETPROTOBYNAME
-
-#include "portlibs/posix/net.h"
-
-void linuxNetInit(void);
-
-#endif /* _PSP_NET_MD_H */
+int  IPv6_supported()
+{
+	return 0;
+}

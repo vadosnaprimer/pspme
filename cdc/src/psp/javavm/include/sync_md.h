@@ -29,8 +29,8 @@
  * Machine-dependent synchronization definitions.
  */
 
-#ifndef _PSP_SYNC_MD_H
-#define _PSP_SYNC_MD_H
+#ifndef _LINUX_SYNC_MD_H
+#define _LINUX_SYNC_MD_H
 
 #include "javavm/include/porting/vm-defs.h"
 #include "javavm/include/sync_arch.h"
@@ -45,6 +45,8 @@
 #endif
 
 #ifndef _ASM
+
+#include "portlibs/posix/sync.h"
 
 /*
  * CVM_ADV_SPINLOCK support, if needed. Note that CVMvolatileStore
@@ -68,14 +70,38 @@ static inline void CVMspinlockYieldImpl()
 
 #endif /* CVM_ADV_SPINLOCK */
 
+/*
+ * In LinuxThreads pthreads, it is not safe to use a signal handler
+ * and longjmp to break out of a condvar wait.  The mutex will not
+ * be reacquired, and the pthreads data structures will not be
+ * cleaned up, leaving the thread on the wait queue.  So we use
+ * a "semaphore" per thread and explicitly wakeup the thread we want
+ * to, just like HotSpot and win32 JDK.
+ */
+
+#define CVMmutexInit(m)		POSIXmutexInit(&(m)->pmtx)
+#define CVMmutexDestroy(m)	POSIXmutexDestroy(&(m)->pmtx)
+#define CVMmutexTryLock(m)	POSIXmutexTryLock(&(m)->pmtx)
+#ifndef CVM_THREAD_SUSPENSION
+#define CVMmutexLock(m)		POSIXmutexLock(&(m)->pmtx)
+#endif /* CVM_THREAD_SUSPENSION */
+#define CVMmutexUnlock(m)	POSIXmutexUnlock(&(m)->pmtx)
+
+CVMBool linuxSyncInit(void);
+void linuxSyncInterruptWait(CVMThreadID *thread);
+void linuxSyncSuspend(CVMThreadID *thread);
+void linuxSyncResume(CVMThreadID *thread);
 
 struct CVMMutex {
-   int dummy;
+    POSIXMutex pmtx;
 };
 
 struct CVMCondVar {
-   int dummy;
+    POSIXCondVar pcv;
+    CVMThreadID *waiters;
+    CVMThreadID **last_p;
 };
 
 #endif /* !_ASM */
-#endif /* _PSP_SYNC_MD_H */
+#endif /* _LINUX_SYNC_MD_H */
+

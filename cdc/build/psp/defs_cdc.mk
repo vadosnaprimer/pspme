@@ -27,15 +27,13 @@
 CVM_BUILDTIME_CLASSES += \
    sun.misc.FileURLMapper
 
-CVM_BUILDTIME_CLASSES += \
-   java.io.UnixFileSystem
+CVM_BUILDTIME_CLASSES +=
 
 #
 # CDC library platform classes
 #
 
-CLASSLIB_CLASSES += \
-        java.lang.UNIXProcess
+CLASSLIB_CLASSES +=
 
 #
 # Things to build for CDC
@@ -43,3 +41,11 @@ CLASSLIB_CLASSES += \
 CVM_TARGETOBJS_SPACE += \
 	Runtime_md.o \
 	FileSystem_md.o \
+	PlainDatagramSocketImpl_md.o \
+	Inet4AddressImpl_md.o \
+	NetworkInterface.o \
+	InetAddressImplFactory.o \
+	net_util_md.o \
+	timezone_md.o \
+	Inet6AddressImpl_md.o
+	

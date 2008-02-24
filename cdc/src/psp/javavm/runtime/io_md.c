@@ -33,4 +33,44 @@
 #include "javavm/include/porting/globals.h"
 #include "javavm/export/jvm.h"
 
-//STUB
+static int
+fileMode(int fd, int *mode)
+{
+    int ret;
+    struct stat buf;
+
+    ret = fstat(fd, &buf);
+    (*mode) = buf.st_mode;
+    return ret;
+}
+
+
+CVMInt32
+POSIXioAvailable(CVMInt32 fd, CVMInt64 *bytes)
+{
+    CVMInt64 cur, end;
+    int mode;
+
+    if (fileMode(fd, &mode) >= 0) {
+        if (S_ISCHR(mode) || S_ISFIFO(mode) || S_ISSOCK(mode)) {
+	    printf("POSIXioAvailable is not implemented for this file mode: %x\n", mode);
+	    return -1;
+        }
+    }
+    {
+	CVMInt32 cur32, end32;
+	if ((cur32 = lseek(fd, 0L, SEEK_CUR)) == -1) {
+	    return 0;
+	} else if ((end32 = lseek(fd, 0L, SEEK_END)) == -1) {
+	    return 0;
+	} else if (lseek(fd, cur32, SEEK_SET) == -1) {
+	    return 0;
+	}
+	/* %comment d003 */
+	cur = CVMint2Long(cur32);
+	end = CVMint2Long(end32);
+    }
+    *bytes = CVMlongSub(end, cur);
+    return 1;
+}
+

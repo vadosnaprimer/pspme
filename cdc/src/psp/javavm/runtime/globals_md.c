@@ -69,6 +69,16 @@ CVMBool CVMinitStaticState()
 #endif
 	return CVM_FALSE;
     }
+
+    
+    linuxCaptureInitialStack();
+
+    if (!linuxSyncInit()) {
+#ifdef CVM_DEBUG
+	fprintf(stderr, "linuxSyncInit failed\n");
+#endif
+        return CVM_FALSE;
+    }
     
     CVMinitPathValues( &props, ".", "lib", "lib" );
     return CVM_TRUE;

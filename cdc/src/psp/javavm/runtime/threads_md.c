@@ -31,51 +31,180 @@
 #include "javavm/include/globals.h"
 #include "javavm/include/assert.h"
 #include "javavm/include/utils.h"
+#include <sys/types.h>
+#include <pthread.h>
+#include <signal.h>
+#include <assert.h>
+#include <stdio.h>
+#include <string.h>
+#include <fcntl.h>
 
 void
 CVMthreadYield(void)
 {
-
+    thr_yield();
 }
 
 #ifdef CVM_THREAD_SUSPENSION
 void
 CVMthreadSuspend(CVMThreadID *t)
 {
-
+    linuxSyncSuspend(t);
 }
 
 void
 CVMthreadResume(CVMThreadID *t)
 {
-
+    linuxSyncResume(t);
 }
 #endif /* CVM_THREAD_SUSPENSION */
+
+#include <sys/resource.h>
+#include <unistd.h>
+
+/* Some static variables of the initial thread stack. These
+ * values are computed by looking at the /proc/<id>/maps of
+ * the thread. */
+static void *initial_stack_top;
+#ifdef LINUX_WATCH_STACK_GROWTH
+static void *initial_stack_bottom;
+#endif
+static pthread_t initial_thread_id;
+
+/* pthread_getattr_np() is a new API provided by glibc (2.2.3
+ * and newer versions). It can be used to get the thread 
+ * attributes, which then can be used to get the thread stack
+ * size information, etc. Some of the older linux kernel
+ * does not support this API. In that case, we cannot compute
+ * the thread stack top accurately.
+ */
+typedef int (*pthread_getattr_np_t) (pthread_t, pthread_attr_t *);
+static pthread_getattr_np_t pthreadGetAttr = 0;
+
+typedef int (*pthread_attr_getstack_t) (pthread_attr_t *, void **, size_t *);
+static pthread_attr_getstack_t pthreadAttrGetStack = 0;
+
+void
+linuxCaptureInitialStack()
+{
+}
+
+static CVMBool
+LINUXcomputeStackTop(CVMThreadID *self)
+{
+        return CVM_TRUE;
+}
+
+#if defined(CVM_JIT_PROFILE) || defined(CVM_GPROF)
+#include <unistd.h>
+#include <sys/param.h>
+#include <sys/time.h>
+
+extern CVMBool __profiling_enabled;
+extern struct itimerval prof_timer;
+
+#endif
 
 CVMBool
 CVMthreadAttach(CVMThreadID *self, CVMBool orphan)
 {
+    if (!LINUXcomputeStackTop(self)) {
+	return CVM_FALSE;
+    }
+    if (pthread_mutex_init(&self->wait_mutex, NULL) != 0) {
+        goto bad3;
+    }
+    if (pthread_cond_init(&self->wait_cv, NULL) != 0) {
+        goto bad2;
+    }
+    if (!POSIXmutexInit(&self->locked)) {
+	goto bad1;
+    }
+    POSIXmutexLock(&self->locked);
+
+    setFPMode();
+    if (!POSIXthreadAttach(self, orphan)) {
+	goto bad0;
+    }
+#if defined(CVM_JIT_PROFILE) || defined(CVM_GPROF)
+#if !defined(CVM_GPROF)
+    if (__profiling_enabled)
+#endif
+    {
+        /* Need to enable the profiling timer for the new thread.
+         * This is to workaround the known problem that profiler
+         * (gprof) only profiles the main thread.
+         */
+	prof_timer.it_value = prof_timer.it_interval;
+	setitimer(ITIMER_PROF, &prof_timer, NULL);
+    }
+#endif
+    return CVM_TRUE;
+
+bad0:
+    POSIXmutexUnlock(&self->locked);
+bad1:
+    pthread_cond_destroy(&self->wait_cv);
+bad2:
+    pthread_mutex_destroy(&self->wait_mutex);
+bad3:
     return CVM_FALSE;
 }
 
 void
 CVMthreadDetach(CVMThreadID *self)
 {
+    POSIXthreadDetach(self);
+    pthread_cond_destroy(&self->wait_cv);
+    pthread_mutex_destroy(&self->wait_mutex);
+    POSIXmutexDestroy(&self->locked);
 }
+
+#ifdef LINUX_WATCH_STACK_GROWTH
+static pthread_mutex_t stk_mutex = PTHREAD_MUTEX_INITIALIZER;
+static size_t max_stack = 0;
+#endif
 
 CVMBool
 CVMthreadStackCheck(CVMThreadID *self, CVMUint32 redZone)
 {
-    return CVM_TRUE;
+#ifdef LINUX_WATCH_STACK_GROWTH
+    if ((void *)&self < self->stackLimit) {
+	size_t size = (char *)self->stackBottom - (char *)&self;
+	size_t dsize = (char *)self->stackLimit - (char *)&self;
+	size_t m;
+	pthread_mutex_lock(&stk_mutex);
+	m = max_stack += dsize;
+	pthread_mutex_unlock(&stk_mutex);
+	fprintf(stderr, "New stack size %dKB reached for thread %ld "
+	    "(%dKB all threads)\n",
+	    size / 1024,
+	    self->pthreadCookie,
+	    m / 1024);
+	self->stackLimit = (char *)&self;
+    }
+#endif
+    return (char *)self->stackTop + redZone < (char *)&self;
 }
 
 void
 CVMthreadInterruptWait(CVMThreadID *thread)
 {
+    thread->interrupted = CVM_TRUE;
+    linuxSyncInterruptWait(thread);
 }
 
 CVMBool
 CVMthreadIsInterrupted(CVMThreadID *thread, CVMBool clearInterrupted)
 {
-    return CVM_TRUE;
+    if (clearInterrupted) {
+	CVMBool wasInterrupted;
+	assert(thread == CVMthreadSelf());
+	wasInterrupted = thread->interrupted;
+	thread->interrupted = CVM_FALSE;
+	return wasInterrupted;
+    } else {
+	return thread->interrupted;
+    }
 }
+
